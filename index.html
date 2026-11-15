@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Abandoned but not Forgotten — an educational archive of human-made artifacts left on the Moon and Mars.">
+  <title>Abandoned but not Forgotten | Space Heritage Archive</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080812;
+      --panel: rgba(20, 20, 39, .88);
+      --panel-2: rgba(29, 28, 53, .94);
+      --text: #eceaf7;
+      --muted: #b9b6cd;
+      --pink: #ff83c7;
+      --purple: #bd9bff;
+      --cyan: #8cecff;
+      --line: rgba(189, 155, 255, .27);
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 15% 5%, rgba(106, 63, 170, .25), transparent 35%),
+        radial-gradient(ellipse at 85% 30%, rgba(42, 118, 151, .13), transparent 32%),
+        var(--bg);
+      font: 16px/1.65 "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--cyan); }
+    .site-header {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; padding: 13px clamp(18px, 5vw, 70px);
+      background: rgba(8,8,18,.88); backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,.09);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: max-content; }
+    .brand-mark {
+      display: grid; place-items: center; width: 38px; height: 38px;
+      border: 1px solid var(--line); border-radius: 50%;
+      color: var(--cyan); font-size: 21px;
+      box-shadow: 0 0 22px rgba(140,236,255,.16);
+    }
+    .brand-name { font-size: .9rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    nav { display: flex; gap: 7px; }
+    .nav-btn {
+      border: 1px solid transparent; border-radius: 9px;
+      padding: 8px 13px; color: var(--muted); background: transparent;
+      transition: .2s ease;
+    }
+    .nav-btn:hover, .nav-btn.active {
+      color: var(--cyan); border-color: rgba(140,236,255,.28);
+      background: rgba(140,236,255,.08);
+    }
+    .search { display: flex; align-items: center; gap: 8px; }
+    .search input {
+      width: min(190px, 22vw); padding: 9px 12px;
+      color: var(--text); background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14); border-radius: 20px;
+      outline: none;
+    }
+    .search input:focus { border-color: var(--cyan); }
+    main { width: min(1180px, 92%); margin: 0 auto; padding: 38px 0 70px; }
+    .page { display: none; animation: appear .35s ease; }
+    .page.active { display: block; }
+    @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .hero {
+      position: relative; overflow: hidden; padding: clamp(30px, 6vw, 68px);
+      border: 1px solid var(--line); border-radius: 24px;
+      background:
+        linear-gradient(110deg, rgba(8,8,18,.96), rgba(15,12,31,.82) 60%, rgba(8,8,18,.78)),
+        url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1800&q=85") center/cover;
+      box-shadow: var(--shadow);
+    }
+    .eyebrow { color: var(--cyan); font-size: .78rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+    h1, h2, h3 { line-height: 1.2; }
+    h1 {
+      max-width: 850px; margin: 15px 0 18px;
+      font-size: clamp(2.1rem, 5.3vw, 4.4rem); letter-spacing: -.035em;
+      background: linear-gradient(100deg, #fff, var(--pink) 48%, var(--cyan));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    h2 { margin: 0 0 15px; font-size: clamp(1.55rem, 3vw, 2.25rem); }
+    h3 { margin: 0 0 10px; font-size: 1.13rem; }
+    p { color: var(--muted); margin: 0 0 15px; }
+    .hero-copy { max-width: 790px; font-size: 1.08rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 25px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 10px 17px; border: 1px solid var(--line); border-radius: 10px;
+      color: var(--text); background: rgba(189,155,255,.12);
+      transition: .2s ease;
+    }
+    .btn.primary { color: #10101a; font-weight: 800; border: 0; background: linear-gradient(110deg, var(--purple), var(--cyan)); }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .section { margin-top: 54px; }
+    .section-intro { max-width: 800px; margin-bottom: 22px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 17px; }
+    .card {
+      display: flex; flex-direction: column; min-height: 205px; padding: 23px;
+      border: 1px solid var(--line); border-radius: 17px;
+      background: var(--panel); box-shadow: 0 12px 35px rgba(0,0,0,.18);
+      transition: .22s ease;
+    }
+    .card:hover { transform: translateY(-4px); border-color: rgba(140,236,255,.65); background: var(--panel-2); }
+    .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .card-icon { font-size: 1.55rem; }
+    .tag {
+      display: inline-block; width: fit-content; margin-bottom: 11px;
+      padding: 3px 9px; border: 1px solid rgba(255,131,199,.35);
+      border-radius: 30px; color: var(--pink); background: rgba(255,131,199,.08);
+      font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .card p { font-size: .94rem; }
+    .card-details {
+      margin-top: auto; padding-top: 12px; color: var(--cyan);
+      font-size: .88rem; font-weight: 700;
+    }
+    .card-details::after { content: "  ↗"; }
+    .archive-note {
+      margin-top: 14px; padding: 14px;
+      border-left: 3px solid var(--cyan); border-radius: 0 9px 9px 0;
+      background: rgba(140,236,255,.075); color: #d8f8ff;
+      font-size: .9rem;
+    }
+    .archive-note strong { display: block; margin-bottom: 5px; color: var(--cyan); font-size: .73rem; letter-spacing: .1em; }
+    .split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 22px; align-items: stretch; }
+    .panel {
+      padding: 25px; border: 1px solid var(--line); border-radius: 17px;
+      background: var(--panel);
+    }
+    .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 20px; }
+    .stat { padding: 15px; border-radius: 12px; background: rgba(255,255,255,.045); }
+    .stat strong { display: block; color: var(--cyan); font-size: 1.45rem; }
+    .stat span { color: var(--muted); font-size: .8rem; }
+    .timeline { display: grid; gap: 15px; margin-top: 20px; }
+    .timeline-item { display: grid; grid-template-columns: 90px 1fr; gap: 14px; }
+    .year { color: var(--pink); font-weight: 800; }
+    .timeline-item p { margin: 0; font-size: .93rem; }
+    .mission-buttons { display: flex; flex-wrap: wrap; gap: 9px; margin: 17px 0 0; }
+    .mission-buttons .btn { font-size: .9rem; }
+    .console {
+      min-height: 150px; margin-top: 17px; padding: 17px;
+      white-space: pre-wrap; overflow-wrap: anywhere;
+      border: 1px solid rgba(140,236,255,.25); border-radius: 11px;
+      color: #a7f0ff; background: #05060d;
+      font: .88rem/1.7 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+    .console .muted { color: #7c829c; }
+    .callout {
+      padding: 17px 19px; border: 1px solid rgba(255,131,199,.25);
+      border-radius: 12px; background: rgba(255,131,199,.055);
+    }
+    .callout p { margin: 0; }
+    .roadmap { display: grid; grid-template-columns: repeat(2,1fr); gap: 15px; }
+    .roadmap article { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+    .roadmap small { color: var(--pink); font-weight: 800; letter-spacing: .08em; }
+    .roadmap p { margin: 8px 0 0; font-size: .93rem; }
+    .footer {
+      margin-top: 58px; padding: 38px 20px; text-align: center;
+      border: 1px solid var(--line); border-radius: 19px;
+      background: linear-gradient(120deg, rgba(189,155,255,.1), rgba(140,236,255,.07));
+    }
+    .footer h2 { background: linear-gradient(90deg,var(--pink),var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .empty-state { display: none; padding: 25px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; }
+    .notice { color: #a6a1bb; font-size: .82rem; margin-top: 10px; }
+    @media (max-width: 850px) {
+      .site-header { flex-wrap: wrap; }
+      .brand { flex: 1; }
+      nav { order: 3; width: 100%; justify-content: center; }
+      .search input { width: 170px; }
+      .grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .split { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .site-header { padding: 11px 4%; gap: 9px; }
+      .brand-name { font-size: .72rem; }
+      .search input { width: 135px; font-size: .83rem; }
+      nav { justify-content: space-between; }
+      .nav-btn { flex: 1; padding: 8px 5px; font-size: .88rem; }
+      main { width: 92%; padding-top: 22px; }
+      .hero { padding: 27px 21px; border-radius: 17px; }
+      .grid, .roadmap { grid-template-columns: 1fr; }
+      .card { min-height: auto; }
+      .stat-row { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 70px 1fr; }
+      .section { margin-top: 40px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">✦</div>
+      <div class="brand-name">Space Heritage Archive</div>
+    </div>
+    <nav aria-label="Main navigation">
+      <button class="nav-btn active" data-page="home" type="button">Home</button>
+      <button class="nav-btn" data-page="archive" type="button">The Archive</button>
+      <button class="nav-btn" data-page="project" type="button">The Project</button>
+    </nav>
+    <label class="search">
+      <input id="searchInput" type="search" placeholder="Search this page…" aria-label="Search visible content">
+    </label>
+  </header>
+
+  <main>
+    <section id="home" class="page active">
+      <div class="hero">
+        <span class="eyebrow">A digital space heritage project</span>
+        <h1>Abandoned, but not Forgotten.</h1>
+        <p class="hero-copy">Humanity has left machines on the Moon and Mars: landers, rovers, scientific instruments and the remains of historic missions. They may be silent today, but each one marks a moment when people reached beyond Earth. This project turns those places and machines into an accessible archive of exploration.</p>
+        <div class="hero-actions">
+          <button class="btn primary" type="button" data-go="archive">Explore the archive</button>
+          <button class="btn" type="button" data-go="project">How the project works</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-intro">
+          <span class="eyebrow">Why it matters</span>
+          <h2>More than equipment left behind</h2>
+          <p>These artifacts connect engineering, science and human curiosity. Their stories can help learners understand what a space mission requires — and why even a mission that has ended can remain scientifically and historically valuable.</p>
+        </div>
+        <div class="grid searchable">
+          <article class="card" data-search="heritage history artifacts moon mars">
+            <div class="card-top"><h3>Preserving heritage</h3><span class="card-icon">🌕</span></div>
+            <p>Historic spacecraft are physical evidence of exploration. Recording their locations, mission histories and scientific roles helps preserve that legacy for future generations.</p>
+            <div class="card-details">Open archive for examples</div>
+            <div class="archive-note" hidden><strong>ARCHIVE NOTE</strong>Not every artifact is a lander. The archive can include descent stages, rover hardware, instruments and other human-made objects left on planetary surfaces.</div>
+          </article>
+          <article class="card" data-search="science data research telemetry mission">
+            <div class="card-top"><h3>Understanding the evidence</h3><span class="card-icon">📡</span></div>
+            <p>Mission reports and scientific datasets help explain what a spacecraft did, what it discovered and what eventually brought its operations to an end.</p>
+            <div class="card-details">Read about the data</div>
+            <div class="archive-note" hidden><strong>ARCHIVE NOTE</strong>A careful archive distinguishes confirmed mission facts from interpretation. A story can be engaging without presenting invented telemetry as real data.</div>
+          </article>
+          <article class="card" data-search="education students learning storytelling">
+            <div class="card-top"><h3>Making space accessible</h3><span class="card-icon">✨</span></div>
+            <p>Short explanations, timelines and interactive records can make planetary science easier to explore, even for readers encountering these missions for the first time.</p>
+            <div class="card-details">See the learning approach</div>
+            <div class="archive-note" hidden><strong>ARCHIVE NOTE</strong>The educational goal is not to replace scientific sources. It is to give visitors a clear starting point and encourage them to investigate the original records.</div>
+          </article>
+        </div>
+      </div>
+
+      <div class="section split">
+        <div class="panel">
+          <span class="eyebrow">Explore a mission</span>
+          <h2>Mission record demonstrator</h2>
+          <p>Select an artifact to view a short, locally stored example record. This is a demonstration interface — it does not connect to NASA servers or retrieve live telemetry.</p>
+          <div class="mission-buttons">
+            <button class="btn" type="button" data-mission="apollo">Apollo 11</button>
+            <button class="btn" type="button" data-mission="viking">Viking 1</button>
+            <button class="btn" type="button" data-mission="opportunity">Opportunity</button>
+          </div>
+          <div id="missionOutput" class="console" aria-live="polite"><span class="muted">ARCHIVE TERMINAL / READY</span>
+Choose a mission above to display its record.</div>
+          <p class="notice">Demonstration content. Consult the linked mission sources for authoritative details.</p>
+        </div>
+        <div class="panel">
+          <span class="eyebrow">At a glance</span>
+          <h2>Three kinds of legacy</h2>
+          <div class="stat-row">
+            <div class="stat"><strong>History</strong><span>What happened?</span></div>
+            <div class="stat"><strong>Science</strong><span>What was learned?</span></div>
+            <div class="stat"><strong>Heritage</strong><span>What remains?</span></div>
+          </div>
+          <div class="callout" style="margin-top:18px">
+            <p>The central idea: the end of a mission does not mean the end of its story. Hardware left on another world can still teach us about exploration, design and discovery.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="archive" class="page">
+      <div class="section-intro">
+        <span class="eyebrow">Selected records</span>
+        <h1>Artifacts of exploration</h1>
+        <p>This is a starter collection, not a complete inventory. Select any record to reveal a note explaining what makes that artifact historically or scientifically interesting.</p>
+      </div>
+      <div class="grid searchable">
+        <article class="card" data-search="apollo 11 moon lunar module eagle descent stage sea tranquility">
+          <span class="tag">Moon · 1969</span><div class="card-top"><h3>Apollo 11 Lunar Module</h3><span class="card-icon">🚀</span></div>
+          <p>The descent stage of the Lunar Module Eagle remained on the Moon after Neil Armstrong and Buzz Aldrin returned to orbit in the ascent stage.</p>
+          <div class="card-details">View archive note</div>
+          <div class="archive-note" hidden><strong>ARCHIVE NOTE</strong>The descent stage served as the landing platform for the first crewed lunar landing. It is a reminder that the Apollo missions left hardware behind as part of their mission design.</div>
+        </article>
+        <article class="card" data-search="viking 1 mars lander chryse planitia 1976">
+          <span class="tag">Mars · 1976</span><div class="card-top"><h3>Viking 1 Lander</h3><span class="card-icon">🛰️</span></div>
+          <p>Viking 1 became the first spacecraft to successfully operate on the Martian surface, returning images and carrying out experiments.</p>
+          <div class="card-details">View archive note</div>
+          <div class="archive-note" hidden><strong>ARCHIVE NOTE</strong>Viking 1 landed at Chryse Planitia on 20 July 1976. Its biology experiments investigated the Martian soil, although their results did not establish the presence of life.</div>
+        </article>
+        <article class="card" data-search="opportunity rover mars meridiani planum 2004 2018">
+          <span class="tag">Mars · 2004–2018</span><div class="card-top"><h3>Opportunity Rover</h3><span class="card-icon">🤖</span></div>
+          <p>Opportunity explored Meridiani Planum for nearly fifteen years, far exceeding its original planned mission duration.</p>
+          <div class="card-details">View archive note</div>
+          <div class="archive-note" hidden><strong>ARCHIVE NOTE</strong>Opportunity's mission ended after a planet-wide dust event in 2018. Its observations provided extensive evidence that liquid water had altered rocks on ancient Mars.</div>
+        </article>
+        <article class="card" data-search="sojourner mars pathfinder rover 1997">
+          <span class="tag">Mars · 1997</span><div class="card-top"><h3>Sojourner Rover</h3><span class="card-icon">🛞</span></div>
+          <p>Sojourner was a small rover deployed by the Mars Pathfinder mission, demonstrating a new way to explore the Martian surface.</p>
+          <div class="card-details">View archive note</div>
+          <div class="archive-note" hidden><strong>ARCHIVE NOTE</strong>Sojourner examined nearby rocks and soil while Pathfinder acted as its communications link to Earth. The mission helped establish the value of mobile surface exploration.</div>
+        </article>
+        <article class="card" data-search="spirit rover mars 2004 2010">
+          <span class="tag">Mars · 2004–2010</span><div class="card-top"><h3>Spirit Rover</h3><span class="card-icon">🔴</span></div>
+          <p>Spirit investigated Gusev Crater and made important discoveries about the history of water on Mars.</p>
+          <div class="card-details">View archive note</div>
+          <div class="archive-note" hidden><strong>ARCHIVE NOTE</strong>After becoming stuck in soft soil, Spirit could no longer reposition itself to maintain sufficient energy through the Martian winter. NASA ended attempts to contact it in 2011.</div>
+        </article>
+        <article class="card" data-search="phoenix mars polar lander 2008 water ice">
+          <span class="tag">Mars · 2008</span><div class="card-top"><h3>Phoenix Lander</h3><span class="card-icon">❄️</span></div>
+          <p>Phoenix studied the Martian arctic region and confirmed the presence of water ice beneath the surface.</p>
+          <div class="card-details">View archive note</div>
+          <div class="archive-note" hidden><strong>ARCHIVE NOTE</strong>Phoenix used a robotic arm to collect and examine soil and ice. Its work helped scientists understand the chemistry and habitability of the Martian polar environment.</div>
+        </article>
+      </div>
+      <div id="emptyState" class="empty-state">No matching records found. Try another search term.</div>
+      <div class="section callout">
+        <p><strong>Research principle:</strong> coordinates, dates and technical claims should be checked against mission documentation before this collection is treated as a formal scientific catalogue.</p>
+      </div>
+    </section>
+
+    <section id="project" class="page">
+      <div class="section-intro">
+        <span class="eyebrow">Project concept</span>
+        <h1>From mission data to meaningful stories</h1>
+        <p>The project proposes a simple educational pathway: find a reliable source, identify the important facts, explain them in plain language and connect each artifact to the wider history of planetary exploration.</p>
+      </div>
+      <div class="grid searchable">
+        <article class="card" data-search="sources nasa pds mission reports data research">
+          <div class="card-top"><h3>01 · Gather sources</h3><span class="card-icon">🔎</span></div>
+          <p>Start with mission pages, scientific publications and archival datasets. Record where each fact came from so visitors can verify it.</p>
+          <div class="archive-note"><strong>OUTPUT</strong>A source list with mission name, agency, document title and relevant date.</div>
+        </article>
+        <article class="card" data-search="organize timeline facts metadata">
+          <div class="card-top"><h3>02 · Organize the facts</h3><span class="card-icon">🗂️</span></div>
+          <p>Group information into a consistent record: destination, landing date, mission purpose, major findings and mission outcome.</p>
+          <div class="archive-note"><strong>OUTPUT</strong>A structured record that makes missions easier to compare.</div>
+        </article>
+        <article class="card" data-search="storytelling education narrative students">
+          <div class="card-top"><h3>03 · Tell the story</h3><span class="card-icon">📖</span></div>
+          <p>Turn verified facts into concise explanations, timelines and learning prompts without inventing events or presenting fiction as telemetry.</p>
+          <div class="archive-note"><strong>OUTPUT</strong>An accessible story linked to its supporting evidence.</div>
+        </article>
+      </div>
+
+      <div class="section">
+        <span class="eyebrow">Learning pathway</span>
+        <h2>How a visitor can explore a record</h2>
+        <div class="timeline">
+          <div class="timeline-item"><div class="year">Discover</div><p>Choose an artifact and identify the world where it landed or operated.</p></div>
+          <div class="timeline-item"><div class="year">Investigate</div><p>Read the mission purpose, timeline and major scientific contributions.</p></div>
+          <div class="timeline-item"><div class="year">Connect</div><p>Compare the artifact with other missions and notice how technology changed over time.</p></div>
+          <div class="timeline-item"><div class="year">Verify</div><p>Follow the source references to learn which details are documented and which are interpretation.</p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="eyebrow">Future development</span>
+        <h2>Possible next steps</h2>
+        <div class="roadmap">
+          <article><small>PHASE 1 · CONTENT</small><h3>Expand the archive</h3><p>Add more lunar and Martian artifacts, each with verified dates, locations and source links.</p></article>
+          <article><small>PHASE 2 · EXPERIENCE</small><h3>Interactive timelines</h3><p>Let visitors follow each mission from launch through landing, discoveries and final contact.</p></article>
+          <article><small>PHASE 3 · ACCESSIBILITY</small><h3>More ways to learn</h3><p>Improve keyboard navigation, contrast, mobile layouts and plain-language explanations.</p></article>
+          <article><small>PHASE 4 · OPEN DATA</small><h3>Connect original sources</h3><p>Where available, link records directly to NASA mission archives and Planetary Data System resources.</p></article>
+        </div>
+      </div>
+
+      <div class="section panel">
+        <span class="eyebrow">Important clarification</span>
+        <h2>What this website does — and does not do</h2>
+        <p>This version is an educational front-end demonstration. The mission records shown here are explanatory summaries, and the interactive terminal displays local sample content. It does not currently query the NASA Planetary Data System, provide live spacecraft telemetry or automatically verify facts.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <h2>Thank you for exploring.</h2>
+      <p>Abandoned, but not forgotten — every artifact has a story worth preserving.</p>
+      <p class="notice">An educational concept about the history and heritage of planetary exploration.</p>
+    </footer>
+  </main>
+
+  <script>
+    const navButtons = [...document.querySelectorAll('.nav-btn')];
+    const pages = [...document.querySelectorAll('.page')];
+    const searchInput = document.getElementById('searchInput');
+
+    function showPage(id) {
+      pages.forEach(page => page.classList.toggle('active', page.id === id));
+      navButtons.forEach(button => button.classList.toggle('active', button.dataset.page === id));
+      searchInput.value = '';
+      filterVisibleContent();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    navButtons.forEach(button => {
+      button.addEventListener('click', () => showPage(button.dataset.page));
+    });
+    document.querySelectorAll('[data-go]').forEach(button => {
+      button.addEventListener('click', () => showPage(button.dataset.go));
+    });
+
+    document.querySelectorAll('.card').forEach(card => {
+      const details = card.querySelector('.archive-note');
+      if (!details) return;
+      card.addEventListener('click', event => {
+        if (event.target.closest('a, button')) return;
+        const opening = details.hidden;
+        details.hidden = !opening;
+        const label = card.querySelector('.card-details');
+        if (label) label.textContent = opening ? 'Hide archive note' : 'View archive note';
+      });
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-expanded', 'false');
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          card.click();
+          card.setAttribute('aria-expanded', String(!details.hidden));
+        }
+      });
+    });
+
+    const missionRecords = {
+      apollo: `ARCHIVE RECORD / APOLLO 11\nDestination: Moon — Sea of Tranquility\nLanding date: 20 July 1969 (UTC)\nArtifact: Lunar Module Eagle descent stage\nMission context: The descent stage remained on the lunar surface when the ascent stage lifted the crew back to lunar orbit.\nRecord type: Educational summary; not live telemetry.`,
+      viking: `ARCHIVE RECORD / VIKING 1\nDestination: Mars — Chryse Planitia\nLanding date: 20 July 1976\nArtifact: Viking 1 lander\nMission context: Returned surface images and conducted experiments on Martian soil, including biology experiments.\nRecord type: Educational summary; not live telemetry.`,
+      opportunity: `ARCHIVE RECORD / OPPORTUNITY\nDestination: Mars — Meridiani Planum\nLanding date: 25 January 2004\nMission ended: 2018\nArtifact: Mars Exploration Rover B\nMission context: Operated for almost 15 years and found geological evidence of past water activity.\nRecord type: Educational summary; not live telemetry.`
+    };
+    document.querySelectorAll('[data-mission]').forEach(button => {
+      button.addEventListener('click', () => {
+        document.getElementById('missionOutput').textContent = missionRecords[button.dataset.mission];
+      });
+    });
+
+    function filterVisibleContent() {
+      const activePage = document.querySelector('.page.active');
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      activePage.querySelectorAll('.searchable .card').forEach(card => {
+        const matches = !query || (card.innerText + ' ' + card.dataset.search).toLowerCase().includes(query);
+        card.hidden = !matches;
+        if (matches) visible++;
+      });
+      const empty = activePage.querySelector('#emptyState');
+      if (empty) empty.style.display = query && visible === 0 ? 'block' : 'none';
+    }
+    searchInput.addEventListener('input', filterVisibleContent);
+  </script>
+</body>
+</html>
