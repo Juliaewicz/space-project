@@ -453,7 +453,7 @@ Choose a mission above to display its record.</div>
       const query = searchInput.value.trim().toLowerCase();
       let visible = 0;
 
-      activePage.querySelectorAll('.searchable .card').forEach(card => {
+      document.querySelectorAll('.searchable.card').forEach(card => {
         const text = (card.innerText + ' ' + (card.dataset.search || '')).toLowerCase();
         const matches = !query || text.includes(query);
 
