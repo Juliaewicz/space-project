@@ -196,8 +196,106 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
     }
+    
+/* FLOATING UFO */
+.space-flyer {
+  position: fixed;
+  z-index: 999;
+  left: 10%;
+  top: 60%;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(140,236,255,.5);
+  background: rgba(140,236,255,.12);
+  color: white;
+  font-size: 27px;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(140,236,255,.4);
+  animation: ufoFlight 22s ease-in-out infinite alternate;
+}
+
+@keyframes ufoFlight {
+  0% { left: 5%; top: 60%; }
+  25% { left: 30%; top: 30%; }
+  50% { left: 65%; top: 65%; }
+  75% { left: 85%; top: 25%; }
+  100% { left: 50%; top: 75%; }
+}
+
+.space-flyer:hover {
+  box-shadow: 0 0 35px #8cecff;
+  transform: scale(1.15);
+}
+
+.space-flyer.burst {
+  animation: ufoBurst .6s ease;
+}
+
+@keyframes ufoBurst {
+  50% {
+    transform: scale(1.8);
+    box-shadow: 0 0 60px 25px rgba(140,236,255,.6);
+  }
+}
+
+.space-toast {
+  position: fixed;
+  z-index: 1000;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 22px;
+  border: 1px solid #8cecff;
+  border-radius: 15px;
+  background: #101025;
+  color: white;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+  text-align: center;
+}
+
+.space-toast.visible {
+  opacity: 1;
+}
+
+.space-spark {
+  position: fixed;
+  z-index: 998;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8cecff;
+  box-shadow: 0 0 12px #8cecff;
+  pointer-events: none;
+  animation: sparkFly .8s ease-out forwards;
+}
+
+@keyframes sparkFly {
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .space-flyer,
+  .space-flyer.burst,
+  .space-spark {
+    animation: none;
+  }
+}
+
   </style>
 </head>
+  <button class="space-flyer" id="spaceFlyer"
+  type="button" aria-label="Click the UFO">
+  🛸
+</button>
+
+<div class="space-toast" id="spaceToast">
+</div>
 <body>
   <header class="site-header">
     <div class="brand">
@@ -394,6 +492,63 @@ Choose a mission above to display its record.</div>
   </main>
 
   <script>
+    
+const spaceFlyer = document.getElementById('spaceFlyer');
+const spaceToast = document.getElementById('spaceToast');
+
+let toastTimer;
+
+spaceFlyer.addEventListener('click', () => {
+
+  spaceFlyer.classList.remove('burst');
+  void spaceFlyer.offsetWidth;
+  spaceFlyer.classList.add('burst');
+
+  spaceToast.textContent =
+    '✦ Signal received. The universe says hello. ✦';
+
+  spaceToast.classList.add('visible');
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => {
+    spaceToast.classList.remove('visible');
+  }, 2500);
+
+  const rect = spaceFlyer.getBoundingClientRect();
+
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+
+  for (let i = 0; i < 16; i++) {
+
+    const spark = document.createElement('span');
+
+    const angle = (Math.PI * 2 * i) / 16;
+    const distance = 40 + Math.random() * 50;
+
+    spark.className = 'space-spark';
+
+    spark.style.left = x + 'px';
+    spark.style.top = y + 'px';
+
+    spark.style.setProperty(
+      '--dx',
+      Math.cos(angle) * distance + 'px'
+    );
+
+    spark.style.setProperty(
+      '--dy',
+      Math.sin(angle) * distance + 'px'
+    );
+
+    document.body.appendChild(spark);
+
+    setTimeout(() => spark.remove(), 900);
+  }
+
+});
+
     const navButtons = [...document.querySelectorAll('.nav-btn')];
     const pages = [...document.querySelectorAll('.page')];
     const searchInput = document.getElementById('searchInput');
