@@ -457,7 +457,7 @@ Choose a mission above to display its record.</div>
         const text = (card.innerText + ' ' + (card.dataset.search || '')).toLowerCase();
         const matches = !query || text.includes(query);
 
-        card.hidden = !matches;
+        card.style.display = matches ? '' : 'none';
         if (matches) visible++;
       });
 
