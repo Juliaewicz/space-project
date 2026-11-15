@@ -401,7 +401,7 @@ Choose a mission above to display its record.</div>
     function showPage(id) {
       pages.forEach(page => page.classList.toggle('active', page.id === id));
       navButtons.forEach(button => button.classList.toggle('active', button.dataset.page === id));
-      searchInput.value = '';
+      document.getElementById('searchInput').value = '';
       filterVisibleContent();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
