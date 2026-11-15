@@ -468,6 +468,12 @@ Choose a mission above to display its record.</div>
     }
 
     searchInput.addEventListener('input', filterVisibleContent);
+    searchInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // Zapobiega przeładowaniu strony przez formularz
+    searchInput.blur();   // Chowa klawiaturę w telefonie / odznacza pole
+  }
+});
 
   </script>
 </body>
