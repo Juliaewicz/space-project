@@ -445,25 +445,28 @@ Choose a mission above to display its record.</div>
         document.getElementById('missionOutput').textContent = missionRecords[button.dataset.mission];
       });
     });
+    
+    function filterContent() {
+    const query = document.getElementById('searchInput').value.trim().toLowerCase();
 
-            function filterVisibleContent() {
-      const activePage = document.querySelector('.page.active');
-      if (!activePage) return;
-      
-      const query = document.getElementById('searchInput').value.trim().toLowerCase();
-      let visible = 0;
-      
-      activePage.querySelectorAll('.searchable .card').forEach(card => {
-        const matches = !query || (card.innerText + ' ' + card.dataset.search).toLowerCase().includes(query);
-        card.hidden = !matches;
-        if (matches) visible++;
-      });
-      
-      const empty = activePage.querySelector('#emptyState');
-      if (empty) empty.style.display = query && visible === 0 ? 'block' : 'none';
-    }
+    const activePage = document.querySelector('.tab-content.active');
+    if (!activePage) return;
 
-    document.getElementById('searchInput').addEventListener('input', filterVisibleContent);
+    const cards = activePage.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = !query || text.includes(query) ? '' : 'none';
+    });
+
+    const paragraphs = activePage.querySelectorAll('p, h1, h2, h3');
+
+    paragraphs.forEach(element => {
+        const text = element.innerText.toLowerCase();
+        element.style.display = !query || text.includes(query) ? '' : 'none';
+    });
+}
+
   </script>
 </body>
 </html>
