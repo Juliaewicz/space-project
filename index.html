@@ -446,14 +446,13 @@ Choose a mission above to display its record.</div>
       });
     });
     
-        function filterVisibleContent() {
+            function filterVisibleContent() {
       const activePage = document.querySelector('.page.active');
       if (!activePage) return;
 
       const query = searchInput.value.trim().toLowerCase();
       let visible = 0;
 
-      // Tutaj zostaje bezpieczne szukanie na aktywnej stronie ze spójną kropką `.searchable.card`
       activePage.querySelectorAll('.searchable.card').forEach(card => {
         const text = (card.innerText + ' ' + (card.dataset.search || '')).toLowerCase();
         const matches = !query || text.includes(query);
@@ -477,15 +476,6 @@ Choose a mission above to display its record.</div>
         searchInput.blur();
       }
     });
-
-    searchInput.addEventListener('input', filterVisibleContent);
-    searchInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    filterVisibleContent(); // <--- To jest ta najważniejsza brakująca linijka!
-    searchInput.blur();
-  }
-});
 
   </script>
 </body>
