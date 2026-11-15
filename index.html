@@ -446,9 +446,9 @@ Choose a mission above to display its record.</div>
       });
     });
 
-    function filterVisibleContent() {
+        function filterVisibleContent() {
       const activePage = document.querySelector('.page.active');
-      const query = searchInput.value.trim().toLowerCase();
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
       let visible = 0;
       activePage.querySelectorAll('.searchable .card').forEach(card => {
         const matches = !query || (card.innerText + ' ' + card.dataset.search).toLowerCase().includes(query);
@@ -458,7 +458,8 @@ Choose a mission above to display its record.</div>
       const empty = activePage.querySelector('#emptyState');
       if (empty) empty.style.display = query && visible === 0 ? 'block' : 'none';
     }
-    searchInput.addEventListener('input', filterVisibleContent);
+
+    document.getElementById('searchInput').addEventListener('input', filterVisibleContent);
   </script>
 </body>
 </html>
